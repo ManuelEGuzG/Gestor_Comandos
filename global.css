@@ -287,26 +287,6 @@ input[type="text"]::placeholder { color: var(--text-dim); }
   .main { padding: 1.5rem 1.25rem 3rem; }
 }
 
-/* ── DIR ROW ── */
-.dir-row {
-  display: flex; align-items: center; gap: 10px;
-}
-.dir-row input {
-  flex: 1;
-  background: rgba(255,176,32,0.05);
-  border-color: rgba(255,176,32,0.3);
-  color: var(--accent2);
-}
-.dir-row input:focus {
-  border-color: var(--accent2);
-  box-shadow: 0 0 0 3px rgba(255,176,32,0.1);
-}
-.dir-badge {
-  font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
-  color: var(--accent2); background: rgba(255,176,32,0.1);
-  border: 1px solid rgba(255,176,32,0.3); border-radius: 4px;
-  padding: 6px 10px; white-space: nowrap; flex-shrink: 0;
-}
 
 /* ── CMD USADO ── */
 .cmd-used {
