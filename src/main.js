@@ -1,4 +1,4 @@
-// Main.js — ProjectGen
+// main.js — ProjectGen
 
 var $ = function(id) { return document.getElementById(id); };
 
@@ -77,9 +77,9 @@ function buildTree(name) {
     { indent: 2, name: 'assets',       cls: 'is-folder', comment: '# Ficheros estáticos' },
     { indent: 3, name: 'fonts',        cls: 'is-folder', comment: '# Tipografías' },
     { indent: 3, name: 'images',       cls: 'is-folder', comment: '# Imágenes' },
-    { indent: 2, name: 'Index.html',   cls: 'is-html',   comment: '# Nuestro HTML' },
-    { indent: 2, name: 'Global.css',   cls: 'is-css',    comment: '# Archivo CSS' },
-    { indent: 2, name: 'Main.js',      cls: 'is-js',     comment: '# Javascript principal' },
+    { indent: 2, name: 'index.html',   cls: 'is-html',   comment: '# Nuestro HTML' },
+    { indent: 2, name: 'global.css',   cls: 'is-css',    comment: '# Archivo CSS' },
+    { indent: 2, name: 'main.js',      cls: 'is-js',     comment: '# Javascript principal' },
     { indent: 1, name: 'README.md',    cls: 'is-file',   comment: '# Instrucciones del proyecto' },
     { indent: 1, name: '.gitignore',   cls: 'is-file',   comment: '# Ficheros a ignorar' },
     { indent: 1, name: 'package.json', cls: 'is-file',   comment: '# Info del proyecto' },
@@ -123,9 +123,9 @@ function buildCommands(cfg) {
     'mkdir ' + cfg.name,
     'cd ' + cfg.name,
     'mkdir src',
-    'New-Item src\\Index.html',
-    'New-Item src\\Global.css',
-    'New-Item src\\Main.js',
+    'New-Item src\\index.html',
+    'New-Item src\\global.css',
+    'New-Item src\\main.js',
   ];
   if (cfg.readme)    mkCmds.push('New-Item README.md');
   if (cfg.gitignore) mkCmds.push('New-Item .gitignore');
@@ -145,7 +145,7 @@ function buildCommands(cfg) {
   var serverInstall, serverRun;
   if (cfg.server === 'servor') {
     serverInstall = 'pnpm add -D servor';
-    serverRun     = 'pnpx servor src/ Index.html 1234 --reload';
+    serverRun     = 'pnpx servor src/ index.html 1234 --reload';
   } else if (cfg.server === 'live-server') {
     serverInstall = 'pnpm add -D live-server';
     serverRun     = 'pnpx live-server src/ --port=1234';
@@ -160,8 +160,16 @@ function buildCommands(cfg) {
   ]});
 
   // 4. Git
-  var gitCmds = ['git init', 'git branch -M main'];
-  if (cfg.gitignore) gitCmds.push('# Edita .gitignore y añade: node_modules/');
+  var gitCmds = [
+    'git init',
+    'git branch -M main',
+    'git config core.ignorecase false',
+  ];
+  if (cfg.gitignore) {
+    gitCmds.push('echo "node_modules/" >> .gitignore');
+    gitCmds.push('echo ".DS_Store" >> .gitignore');
+    gitCmds.push('echo "dist/" >> .gitignore');
+  }
   gitCmds.push('git add .');
   gitCmds.push('git commit -m "feat: init project structure"');
   groups.push({ title: '🔀 Git', cmds: gitCmds });
@@ -179,7 +187,7 @@ function buildCommands(cfg) {
   if (cfg.ghPages) {
     groups.push({ title: '🚀 GitHub Pages', cmds: [
       'pnpm add -D gh-pages',
-      'pnpm pkg set scripts.deploy="gh-pages -d src/"',
+      'pnpm pkg set scripts.deploy="gh-pages -d src/ --no-history"',
       '# Publicar: pnpm run deploy',
       'pnpm run deploy',
     ]});
@@ -232,7 +240,7 @@ function buildPkgJson(cfg) {
   var devDeps = {};
 
   if (cfg.server === 'servor') {
-    scripts.dev = 'pnpx servor src/ Index.html 1234 --reload';
+    scripts.dev = 'pnpx servor src/ index.html 1234 --reload';
     devDeps.servor = '^4.0.2';
   } else if (cfg.server === 'live-server') {
     scripts.dev = 'pnpx live-server src/ --port=1234';
