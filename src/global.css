@@ -322,3 +322,15 @@ input[type="text"]::placeholder { color: var(--text-dim); }
 .cmd-used .copy-cmd-btn {
   color: var(--green) !important;
 }
+
+/* ── UCR LOGO ── */
+.ucr-logo {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 90px;
+  opacity: 0.55;
+  z-index: 50;
+  pointer-events: none;
+  filter: brightness(1.2);
+}
