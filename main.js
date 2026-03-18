@@ -296,6 +296,20 @@ generateBtn.addEventListener('click', function() {
 });
 
 resetBtn.addEventListener('click', function() {
+  // Limpiar campos de texto
+  $('project-name').value  = '';
+  $('project-desc').value  = '';
+  $('author-name').value   = '';
+  $('github-user').value   = '';
+
+  // Resetear servidor a servor
+  document.querySelector('input[name="server"][value="servor"]').checked = true;
+
+  // Resetear checkboxes a su estado inicial
+  $('include-github').checked    = true;
+  $('include-gitignore').checked = true;
+  $('include-readme').checked    = true;
+
   outputSection.classList.add('hidden');
   configCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
