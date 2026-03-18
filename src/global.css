@@ -326,11 +326,10 @@ input[type="text"]::placeholder { color: var(--text-dim); }
 /* ── UCR LOGO ── */
 .ucr-logo {
   position: fixed;
-  bottom: 1.5rem;
+  top: 1.5rem;
   right: 1.5rem;
-  width: 90px;
-  opacity: 0.55;
+  width: 100px;
+  opacity: 0.85;
   z-index: 50;
   pointer-events: none;
-  filter: brightness(1.2);
 }
