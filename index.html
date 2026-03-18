@@ -6,206 +6,237 @@
   <title>ProjectGen — Inicializador de proyectos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="global.css" />
 </head>
 <body>
 
-  <!-- Background grid -->
-  <div class="bg-grid"></div>
-  <div class="bg-glow"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
-  <!-- Header -->
   <header class="header">
     <div class="header-inner">
       <div class="logo">
-        <span class="logo-symbol">&gt;_</span>
-        <span class="logo-name">ProjectGen</span>
-        <span class="logo-version">v2.0</span>
+        <div class="logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <span class="logo-text">ProjectGen</span>
       </div>
-      <div class="header-meta">
-        <span class="meta-dot"></span>
-        <span class="meta-text">Inicializador de proyectos web</span>
+      <div class="header-pill">
+        <span class="pill-dot"></span>
+        listo para usar
       </div>
     </div>
   </header>
 
   <main class="main">
 
-    <!-- Hero -->
     <div class="hero">
-      <div class="hero-label">// herramienta de configuración</div>
-      <h1 class="hero-title">Crea tu proyecto<br><span class="hero-accent">en segundos</span></h1>
-      <p class="hero-sub">Genera la estructura, comandos pnpm, git y GitHub Pages listos para ejecutar.</p>
+      <div class="hero-eyebrow">Herramienta de inicialización</div>
+      <h1 class="hero-title">
+        Tu proyecto web<br>
+        <span class="gradient-text">listo en segundos</span>
+      </h1>
+      <p class="hero-desc">Configura el nombre, elige el servidor y genera todos los comandos para estructura, pnpm, git y GitHub Pages.</p>
     </div>
 
-    <!-- Form card -->
-    <section class="panel" id="config-card">
-      <div class="panel-header">
-        <div class="panel-tag">01</div>
-        <span class="panel-title">Configura tu proyecto</span>
-        <div class="panel-line"></div>
+    <!-- CONFIG -->
+    <div class="card" id="config-card">
+      <div class="card-step">
+        <div class="step-num">01</div>
+        <div class="step-info">
+          <div class="step-title">Configura tu proyecto</div>
+          <div class="step-sub">Rellena los campos para personalizar los comandos</div>
+        </div>
       </div>
 
       <div class="form-grid">
         <div class="field">
-          <label for="project-name">
-            <span class="field-num">—</span> Nombre del proyecto
-          </label>
-          <input type="text" id="project-name" placeholder="my-awesome-project" spellcheck="false" autocomplete="off" />
+          <label for="project-name">Nombre del proyecto</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+            </span>
+            <input type="text" id="project-name" placeholder="my-awesome-project" spellcheck="false" autocomplete="off" />
+          </div>
           <span class="field-hint">minúsculas y guiones · mismo nombre que la carpeta</span>
         </div>
+
         <div class="field">
-          <label for="project-desc">
-            <span class="field-num">—</span> Descripción
-          </label>
-          <input type="text" id="project-desc" placeholder="Mi proyecto web" autocomplete="off" />
+          <label for="project-desc">Descripción</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            </span>
+            <input type="text" id="project-desc" placeholder="Mi proyecto web" autocomplete="off" />
+          </div>
         </div>
+
         <div class="field">
-          <label for="author-name">
-            <span class="field-num">—</span> Autor
-          </label>
-          <input type="text" id="author-name" placeholder="Tu nombre" autocomplete="off" />
+          <label for="author-name">Autor</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <input type="text" id="author-name" placeholder="Tu nombre" autocomplete="off" />
+          </div>
         </div>
+
         <div class="field">
-          <label for="github-user">
-            <span class="field-num">—</span> Usuario de GitHub
-          </label>
-          <input type="text" id="github-user" placeholder="username" autocomplete="off" />
+          <label for="github-user">Usuario de GitHub</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            </span>
+            <input type="text" id="github-user" placeholder="username" autocomplete="off" />
+          </div>
         </div>
 
         <div class="field full">
-          <label><span class="field-num">—</span> Servidor de desarrollo</label>
-          <div class="radio-group">
-            <label class="radio-option">
+          <label>Servidor de desarrollo</label>
+          <div class="server-grid">
+            <label class="server-card">
               <input type="radio" name="server" value="servor" checked />
-              <span class="radio-inner">
-                <span class="radio-dot"></span>
-                servor
-                <span class="tag-rec">recomendado</span>
-              </span>
+              <div class="server-inner">
+                <div class="server-name">servor</div>
+                <div class="server-desc">Rápido, ligero, sin config</div>
+                <span class="server-badge">recomendado</span>
+              </div>
+              <div class="server-check">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
             </label>
-            <label class="radio-option">
+            <label class="server-card">
               <input type="radio" name="server" value="live-server" />
-              <span class="radio-inner">
-                <span class="radio-dot"></span>
-                live-server
-              </span>
+              <div class="server-inner">
+                <div class="server-name">live-server</div>
+                <div class="server-desc">Clásico, muy conocido</div>
+              </div>
+              <div class="server-check">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
             </label>
-            <label class="radio-option">
+            <label class="server-card">
               <input type="radio" name="server" value="vite" />
-              <span class="radio-inner">
-                <span class="radio-dot"></span>
-                vite
-              </span>
+              <div class="server-inner">
+                <div class="server-name">vite</div>
+                <div class="server-desc">Moderno, muy rápido</div>
+              </div>
+              <div class="server-check">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
             </label>
           </div>
         </div>
 
         <div class="field full">
-          <label><span class="field-num">—</span> Opciones</label>
-          <div class="checkbox-group">
-            <label class="check-option">
+          <label>Opciones extra</label>
+          <div class="toggle-grid">
+            <label class="toggle-item">
               <input type="checkbox" id="include-github" checked />
-              <span class="check-inner">
-                <span class="check-box"></span>
-                GitHub Pages
-              </span>
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <div class="toggle-info">
+                <span class="toggle-name">GitHub Pages</span>
+                <span class="toggle-desc">Despliegue automático</span>
+              </div>
             </label>
-            <label class="check-option">
+            <label class="toggle-item">
               <input type="checkbox" id="include-gitignore" checked />
-              <span class="check-inner">
-                <span class="check-box"></span>
-                .gitignore
-              </span>
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <div class="toggle-info">
+                <span class="toggle-name">.gitignore</span>
+                <span class="toggle-desc">node_modules, dist, .DS_Store</span>
+              </div>
             </label>
-            <label class="check-option">
+            <label class="toggle-item">
               <input type="checkbox" id="include-readme" checked />
-              <span class="check-inner">
-                <span class="check-box"></span>
-                README.md
-              </span>
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <div class="toggle-info">
+                <span class="toggle-name">README.md</span>
+                <span class="toggle-desc">Documentación del proyecto</span>
+              </div>
             </label>
           </div>
         </div>
       </div>
 
-      <button class="btn-generate" id="generate-btn">
-        <span class="btn-icon-wrap">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-        </span>
-        <span>Generar comandos</span>
-        <span class="btn-arrow">→</span>
-      </button>
-    </section>
+      <div class="card-footer">
+        <button class="btn-generate" id="generate-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Generar comandos
+        </button>
+      </div>
+    </div>
 
     <!-- OUTPUT -->
     <section class="output-section hidden" id="output-section">
 
-      <!-- Tree -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-tag">02</div>
-          <span class="panel-title">Estructura del proyecto</span>
-          <div class="panel-line"></div>
+      <div class="card">
+        <div class="card-step">
+          <div class="step-num">02</div>
+          <div class="step-info">
+            <div class="step-title">Estructura del proyecto</div>
+            <div class="step-sub">Carpetas y archivos que se crearán</div>
+          </div>
         </div>
         <div class="tree-preview" id="tree-preview"></div>
       </div>
 
-      <!-- Commands -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-tag">03</div>
-          <span class="panel-title">Comandos a ejecutar</span>
-          <div class="panel-line"></div>
-          <button class="btn-copy-all" id="copy-all-btn">
+      <div class="card">
+        <div class="card-step">
+          <div class="step-num">03</div>
+          <div class="step-info">
+            <div class="step-title">Comandos a ejecutar</div>
+            <div class="step-sub">Cópialos uno a uno o todos a la vez</div>
+          </div>
+          <button class="btn-outline" id="copy-all-btn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            copiar todo
+            Copiar todo
           </button>
         </div>
         <div class="commands-list" id="commands-list"></div>
       </div>
 
-      <!-- Package JSON -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-tag">04</div>
-          <span class="panel-title">package.json resultante</span>
-          <div class="panel-line"></div>
-          <button class="btn-icon-sm" id="copy-pkg-btn">
+      <div class="card">
+        <div class="card-step">
+          <div class="step-num">04</div>
+          <div class="step-info">
+            <div class="step-title">package.json resultante</div>
+            <div class="step-sub">Así quedará tu archivo de configuración</div>
+          </div>
+          <button class="btn-icon" id="copy-pkg-btn">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
           </button>
         </div>
         <pre class="code-block" id="pkg-preview"></pre>
       </div>
 
-      <!-- URLs -->
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-tag">05</div>
-          <span class="panel-title">URLs del proyecto</span>
-          <div class="panel-line"></div>
+      <div class="card">
+        <div class="card-step">
+          <div class="step-num">05</div>
+          <div class="step-info">
+            <div class="step-title">URLs del proyecto</div>
+            <div class="step-sub">Dónde encontrar tu proyecto</div>
+          </div>
         </div>
         <div class="urls-grid" id="urls-grid"></div>
       </div>
 
-      <button class="btn-reset" id="reset-btn">
+      <button class="btn-ghost" id="reset-btn">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-        nuevo proyecto
+        Nuevo proyecto
       </button>
     </section>
 
   </main>
 
   <footer class="footer">
-    <span class="footer-prompt">$</span>
-    <span>pnpm + git + GitHub Pages</span>
-    <span class="footer-sep">·</span>
-    <span>solo frontend</span>
+    <p>Hecho con <span class="heart">♥</span> para el flujo <strong>pnpm + git + GitHub Pages</strong></p>
   </footer>
 
   <div class="toast hidden" id="toast">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
     ¡Copiado!
   </div>
 

@@ -1,4 +1,4 @@
-// main.js — ProjectGen v2.0
+// main.js — ProjectGen v3.0
 
 var $ = function(id) { return document.getElementById(id); };
 
@@ -16,9 +16,7 @@ var toast         = $('toast');
 
 // ── TOAST ──
 var toastTimer;
-function showToast(msg) {
-  var textNode = toast.lastChild;
-  if (textNode && textNode.nodeType === 3) textNode.textContent = msg || ' ¡Copiado!';
+function showToast() {
   toast.classList.remove('hidden');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function() { toast.classList.add('hidden'); }, 2000);
@@ -29,15 +27,19 @@ function copyText(text, btn) {
   function markUsed() {
     if (btn) {
       var item = btn.closest('.cmd-item');
-      if (item) item.classList.add('cmd-used');
+      if (item) {
+        item.classList.add('cmd-used');
+        var prompt = item.querySelector('.cmd-prompt');
+        if (prompt) prompt.textContent = '✓';
+      }
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+      btn.style.color = 'var(--green)';
     }
-    showToast(' ¡Copiado!');
+    showToast();
   }
 
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text).then(markUsed).catch(function() {
-      fallbackCopy(text, markUsed);
-    });
+    navigator.clipboard.writeText(text).then(markUsed).catch(function() { fallbackCopy(text, markUsed); });
   } else {
     fallbackCopy(text, markUsed);
   }
@@ -58,7 +60,6 @@ function fallbackCopy(text, cb) {
 function getServer() {
   return document.querySelector('input[name="server"]:checked').value;
 }
-
 function slugify(s) {
   return s.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
@@ -69,14 +70,14 @@ function buildTree(name) {
     { indent: 0, prefix: '',     name: name,           cls: 'is-folder', comment: '# Carpeta del proyecto' },
     { indent: 1, prefix: '├─ ',  name: 'src/',         cls: 'is-folder', comment: '# Código fuente' },
     { indent: 2, prefix: '├─ ',  name: 'assets/',      cls: 'is-folder', comment: '# Estáticos' },
-    { indent: 3, prefix: '├─ ',  name: 'fonts/',       cls: 'is-folder', comment: '# Tipografías' },
-    { indent: 3, prefix: '└─ ',  name: 'images/',      cls: 'is-folder', comment: '# Imágenes' },
+    { indent: 3, prefix: '├─ ',  name: 'fonts/',       cls: 'is-folder', comment: '' },
+    { indent: 3, prefix: '└─ ',  name: 'images/',      cls: 'is-folder', comment: '' },
     { indent: 2, prefix: '├─ ',  name: 'index.html',   cls: 'is-html',   comment: '# HTML principal' },
     { indent: 2, prefix: '├─ ',  name: 'global.css',   cls: 'is-css',    comment: '# Estilos' },
     { indent: 2, prefix: '└─ ',  name: 'main.js',      cls: 'is-js',     comment: '# Javascript' },
     { indent: 1, prefix: '├─ ',  name: 'README.md',    cls: 'is-file',   comment: '# Documentación' },
-    { indent: 1, prefix: '├─ ',  name: '.gitignore',   cls: 'is-file',   comment: '# Ignorados por git' },
-    { indent: 1, prefix: '└─ ',  name: 'package.json', cls: 'is-file',   comment: '# Config del proyecto' },
+    { indent: 1, prefix: '├─ ',  name: '.gitignore',   cls: 'is-file',   comment: '# Ignorados' },
+    { indent: 1, prefix: '└─ ',  name: 'package.json', cls: 'is-file',   comment: '# Config' },
   ];
 
   treePreview.innerHTML = lines.map(function(l) {
@@ -85,17 +86,14 @@ function buildTree(name) {
     return '<div class="tree-line">'
       + '<span class="tree-indent">' + pad + l.prefix + '</span>'
       + '<span class="tree-name ' + l.cls + '">' + l.name + '</span>'
-      + '<span class="tree-comment">' + l.comment + '</span>'
+      + (l.comment ? '<span class="tree-comment">' + l.comment + '</span>' : '')
       + '</div>';
   }).join('');
 }
 
 // ── HIGHLIGHT ──
 function highlightCmd(cmd) {
-  var safe = cmd
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  var safe = cmd.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   safe = safe.replace(/^(cd|mkdir|pnpm|git|New-Item|echo|touch|code)\b/, '<span class="kw">$1</span>');
   safe = safe.replace(/(\s--?[\w-]+)/g, '<span class="flag">$1</span>');
   safe = safe.replace(/&quot;(.*?)&quot;/g, '<span class="val">"$1"</span>');
@@ -125,9 +123,9 @@ function buildCommands(cfg) {
     'pnpm init',
     'pnpm pkg set type=module',
     'pnpm pkg set name="' + cfg.name + '"',
-    'pnpm pkg set description="' + cfg.desc + '"',
-    'pnpm pkg set author="' + cfg.author + '"',
-  ]});
+    cfg.desc    ? 'pnpm pkg set description="' + cfg.desc   + '"' : null,
+    cfg.author  ? 'pnpm pkg set author="'      + cfg.author + '"' : null,
+  ].filter(Boolean)});
 
   // 3. Servidor
   var serverInstall, serverRun;
@@ -141,7 +139,7 @@ function buildCommands(cfg) {
     serverInstall = 'pnpm add -D vite';
     serverRun     = 'pnpx vite --root src/ --port 1234';
   }
-  groups.push({ title: 'Servidor de desarrollo · ' + cfg.server, cmds: [
+  groups.push({ title: 'Servidor · ' + cfg.server, cmds: [
     serverInstall,
     'pnpm pkg set scripts.dev="' + serverRun + '"',
     '# Arrancar: pnpm run dev',
@@ -188,26 +186,23 @@ function buildCommands(cfg) {
     g.cmds.forEach(function(cmd) {
       if (cmd.charAt(0) === '#') {
         html += '<div class="cmd-item cmd-comment">'
-          + '<span class="cmd-prompt">#</span>'
-          + '<span class="cmd-text"><em style="color:var(--text-dim);font-style:normal">' + cmd.slice(2) + '</em></span>'
+          + '<span class="cmd-prompt" style="color:var(--text-3)">#</span>'
+          + '<span class="cmd-text"><span style="color:var(--text-3)">' + cmd.slice(2) + '</span></span>'
           + '</div>';
       } else {
-        var encoded = cmd.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+        var encoded = cmd.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
         html += '<div class="cmd-item">'
           + '<span class="cmd-prompt">$</span>'
           + '<span class="cmd-text">' + highlightCmd(cmd) + '</span>'
           + '<button class="copy-cmd-btn" data-cmd="' + encoded + '" title="Copiar">'
-          + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'
-          + '<rect x="9" y="9" width="13" height="13" rx="2"/>'
-          + '<path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>'
-          + '</svg></button></div>';
+          + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'
+          + '</button></div>';
       }
     });
     html += '</div>';
   });
 
   commandsList.innerHTML = html;
-
   commandsList.querySelectorAll('.copy-cmd-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       copyText(this.getAttribute('data-cmd'), this);
@@ -237,21 +232,14 @@ function buildPkgJson(cfg) {
     devDeps['gh-pages'] = '^6.0.0';
   }
 
-  var pkg = {
-    name: cfg.name,
-    description: cfg.desc || '',
-    type: 'module',
-    author: cfg.author || '',
-    scripts: scripts,
-    devDependencies: devDeps
-  };
-
+  var pkg = { name: cfg.name, description: cfg.desc || '', type: 'module', author: cfg.author || '', scripts: scripts, devDependencies: devDeps };
   var json = JSON.stringify(pkg, null, 2);
+
   pkgPreview.innerHTML = json
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
     .replace(/: "([^"]+)"/g, ': <span class="json-str">"$1"</span>')
-    .replace(/[{}]/g, function(m) { return '<span class="json-brace">' + m + '</span>'; });
+    .replace(/[{}]/g, function(m) { return '<span class="json-brace">'+m+'</span>'; });
 
   return json;
 }
@@ -259,33 +247,31 @@ function buildPkgJson(cfg) {
 // ── URLS ──
 function buildUrls(cfg) {
   var items = [
-    { label: 'Servidor local',  url: 'http://localhost:1234',  desc: 'pnpm run dev' },
-    { label: 'Código fuente',   url: cfg.user ? 'https://github.com/' + cfg.user + '/' + cfg.name : 'https://github.com/USER/REPO', desc: 'Repositorio GitHub' },
+    { label: 'Servidor local', url: 'http://localhost:1234', desc: 'pnpm run dev' },
+    { label: 'Código fuente',  url: cfg.user ? 'https://github.com/'+cfg.user+'/'+cfg.name : 'https://github.com/USER/REPO', desc: 'Repositorio GitHub' },
   ];
-  if (cfg.ghPages && cfg.user) {
-    items.push({ label: 'GitHub Pages', url: 'https://' + cfg.user + '.github.io/' + cfg.name, desc: 'Web pública' });
-  }
+  if (cfg.ghPages && cfg.user)
+    items.push({ label: 'GitHub Pages', url: 'https://'+cfg.user+'.github.io/'+cfg.name, desc: 'Web pública' });
+
   urlsGrid.innerHTML = items.map(function(item) {
     return '<div class="url-item">'
-      + '<div class="url-label">' + item.label + '</div>'
-      + '<a class="url-link" href="' + item.url + '" target="_blank">' + item.url + '</a>'
-      + '<div class="url-desc">' + item.desc + '</div>'
-      + '</div>';
+      +'<div class="url-label">'+item.label+'</div>'
+      +'<a class="url-link" href="'+item.url+'" target="_blank">'+item.url+'</a>'
+      +'<div class="url-desc">'+item.desc+'</div>'
+      +'</div>';
   }).join('');
 }
 
-// ── GET ALL ──
 function getAllCommands(groups) {
   return groups.map(function(g) {
-    return '# ' + g.title + '\n' + g.cmds.join('\n');
+    return '# '+g.title+'\n'+g.cmds.join('\n');
   }).join('\n\n');
 }
 
 // ── GENERATE ──
 generateBtn.addEventListener('click', function() {
-  var rawName = $('project-name').value.trim();
   var cfg = {
-    name:      slugify(rawName) || 'my-project',
+    name:      slugify($('project-name').value.trim()) || 'my-project',
     desc:      $('project-desc').value.trim(),
     author:    $('author-name').value.trim(),
     user:      $('github-user').value.trim(),
@@ -309,13 +295,11 @@ generateBtn.addEventListener('click', function() {
   }, 50);
 });
 
-// ── RESET ──
 resetBtn.addEventListener('click', function() {
   outputSection.classList.add('hidden');
   configCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-// ── AUTO SLUGIFY ──
 $('project-name').addEventListener('blur', function() {
   if (this.value) this.value = slugify(this.value);
 });
